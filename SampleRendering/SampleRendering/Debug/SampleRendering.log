@@ -1,0 +1,10 @@
+﻿  ModelManager.cpp
+  RenderBase.cpp
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(409): warning C4018: “<”: 有符号/无符号不匹配
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(569): warning C4244: “初始化”: 从“UINT64”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(609): warning C4018: “<”: 有符号/无符号不匹配
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(994): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(995): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(1004): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+  正在生成代码...
+  SampleRendering.vcxproj -> E:\DirextX\SampleRendering-master\SampleRendering\Debug\SampleRendering.exe

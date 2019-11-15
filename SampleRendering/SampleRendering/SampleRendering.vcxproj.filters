@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{0faff194-22d8-44a7-9550-c6754dbd5068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{f161bdd6-c952-4fb8-b4d8-0ec30b7fe01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{17d14c03-9750-4bc5-a40a-ec1720d0d869}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WindowsProcess.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\d3dUtil.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\d3dx12.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\DDSTextureLoader.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\MathHelper.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\UploadBuffer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\GeometryGenerator.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="PSOManage.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManage.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderBase.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderItem.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderItemManage.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseStruct.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameResource.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Camera.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IBLProcess.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IBLSpecular.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Gbuffer.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRendering.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsProcess.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsMain.cpp" />
+    <ClCompile Include="Common\d3dUtil.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\DDSTextureLoader.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\MathHelper.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\GeometryGenerator.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="PSOManage.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManage.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderBase.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderItemManage.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameResource.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Camera.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IBLProcess.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IBLSpecular.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Gbuffer.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRendering.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Default.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\LightUtil.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\BRDF.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\IrrainceIBL.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Specular.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ImprotanceSample.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SGLightSource.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\GbufferFirstPass.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\GbufferSecondPass.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ShadowMap.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Debug.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SkyBox.hlsl">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>

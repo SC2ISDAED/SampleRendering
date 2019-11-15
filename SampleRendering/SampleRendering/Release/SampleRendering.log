@@ -1,0 +1,5 @@
+﻿I:\RenderingProgram\SampleRendering\SampleRendering\Shaders\BRDF.hlsl(82,11-21): warning X3206: implicit truncation of vector type
+I:\RenderingProgram\SampleRendering\SampleRendering\Shaders\BRDF.hlsl(83,11-35): warning X3206: implicit truncation of vector type
+FXC : error X3501: 'main': entrypoint not found
+  
+  compilation failed; no code produced
