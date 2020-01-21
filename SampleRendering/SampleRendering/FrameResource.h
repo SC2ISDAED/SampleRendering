@@ -31,7 +31,9 @@ public:
 		const std::unordered_map<std::string,
 		std::unique_ptr<Material>> & mMaterials,
 		const Camera &mCamera);
-	void UpdateInstancedData(const std::vector<std::unique_ptr<RenderItem>> &mAllRitems,
+	void UpdateInstancedData(const GameTimer &gt, const std::vector<std::unique_ptr<RenderItem>> &mAllRitems,
+		const Camera& mCamera);
+	void InlizeInstancedData(const std::vector<std::unique_ptr<RenderItem>> &mAllRitems,
 		const Camera& mCamera);
 	void UpdateMainPassCBS(PassConstants &mMainPassCB);
 private:

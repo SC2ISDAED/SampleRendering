@@ -9,10 +9,11 @@
 #include "FrameResource.h"
 #include "Common/Camera.h"
 #include "ShadowMapManager.h"
+#include "TAAPass.h"
 #include "iostream"
 #include "thread"
 #include "future"
-#include <fbxsdk.h>
+
 using Microsoft::WRL::ComPtr;
 using namespace std;
 using namespace DirectX;
@@ -167,7 +168,7 @@ bool RenderBase::initDirect3D()
 
 	CreateFrameResource();
 	BuildCubeFaceCamera();
-	mFrameResources[0]->UpdateInstancedData(mRenderItemManage->mAllRitems, mCamera);
+	mFrameResources[0]->InlizeInstancedData(mRenderItemManage->mAllRitems, mCamera);
 	
 
 	mIBLSpecular = make_shared<IBLSpecular>(md3dDevice.Get(),
@@ -188,6 +189,8 @@ bool RenderBase::initDirect3D()
 		mIBLSpecular, mIBLProcess,
 		mClientWidth, mClientHeight,
 		mRtvDescriptorSize, mDsvDescriptorSize);
+
+	mTAAPassDraw = make_shared<TAAPassDraw>(mPSOManage);
 
 	mTextureCommandList->Close();
 	mCommandList->Close();
@@ -274,6 +277,7 @@ void RenderBase::CreateSwapChain()
 	sd.BufferDesc.Height = mClientHeight;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
+	
 	sd.BufferDesc.Format = mBackBufferFormat;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -520,7 +524,7 @@ void RenderBase::BuildCubeFaceCamera()
 		XMStoreFloat4x4(&cubeFacePassCB.Proj, XMMatrixTranspose(proj));
 		XMStoreFloat4x4(&cubeFacePassCB.InvProj, XMMatrixTranspose(invProj));
 		XMStoreFloat4x4(&cubeFacePassCB.ViewProj, XMMatrixTranspose(viewProj));
-		XMStoreFloat4x4(&cubeFacePassCB.InvViewProj, XMMatrixTranspose(invViewProj));
+
 		cubeFacePassCB.EyePosW = mCubeMapCamera[i].GetCameraLocation3f();
 		cubeFacePassCB.RenderTargetSize = XMFLOAT2((float)CubeMapSize, (float)CubeMapSize);
 		cubeFacePassCB.InvRenderTargetSize = XMFLOAT2(1.0f / CubeMapSize, 1.0f / CubeMapSize);
@@ -573,7 +577,6 @@ void RenderBase::Update(GameTimer& gt)
 		CloseHandle(eventHandle);
 	}
 	UpdatePassCB(gt);
-	
 	mCurrentFrameResource->UpdateFrameResource(gt, mRenderItemManage->mAllRitems,
 		mMainPassCB,
 		mRenderItemManage->mMaterials,
@@ -593,12 +596,16 @@ void RenderBase::UpdatePassCB(GameTimer& gt)
 	XMMATRIX invProj = XMMatrixInverse(&XMMatrixDeterminant(proj), proj);
 	XMMATRIX invViewProj = XMMatrixInverse(&XMMatrixDeterminant(viewProj), viewProj);
 
+// 	mMainPassCB.ViewProj._21 = (2.0f - 1.0f) / mClientWidth ;
+// 	mMainPassCB.ViewProj._22 = (2.0f - 1.0f) / mClientHeight;
+	mMainPassCB.LastViewProj = mMainPassCB.ViewProj;
 	XMStoreFloat4x4(&mMainPassCB.View, XMMatrixTranspose(view));
 	XMStoreFloat4x4(&mMainPassCB.InvView, XMMatrixTranspose(invView));
 	XMStoreFloat4x4(&mMainPassCB.Proj, XMMatrixTranspose(proj));
 	XMStoreFloat4x4(&mMainPassCB.InvProj, XMMatrixTranspose(invProj));
 	XMStoreFloat4x4(&mMainPassCB.ViewProj, XMMatrixTranspose(viewProj));
-	XMStoreFloat4x4(&mMainPassCB.InvViewProj, XMMatrixTranspose(invViewProj));
+	
+
 	mMainPassCB.EyePosW = mCamera.GetCameraLocation3f();
 	mMainPassCB.RenderTargetSize = XMFLOAT2((float)mClientWidth, (float)mClientHeight);
 	mMainPassCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
@@ -618,6 +625,8 @@ void RenderBase::UpdatePassCB(GameTimer& gt)
 	mMainPassCB.FogColor = { 1.0f,0.0f,0.0f,0.3f };
 	mMainPassCB.FogStart = { 10.0f };
 	mMainPassCB.FogRandge = { 100.0f };
+
+	mMainPassCB.FrameCount = (mMainPassCB.FrameCount + 1) % 8;
 }
 
 void RenderBase::Draw(GameTimer& gt)
@@ -638,20 +647,25 @@ void RenderBase::Draw(GameTimer& gt)
 	mGbuffer->FirstPass(mCurrentFrameResource, mCommandList.Get());
 // 
 	mGbuffer->SecondPass(mCurrentFrameResource, mCommandList.Get(),
-		targetRTV, mShadowMapManager,DepthStencilView(), RenderTarget);
-// 	
+		 mShadowMapManager,DepthStencilView());
+	mTAAPassDraw->TAAPass(mCommandList.Get(), mCurrentFrameResource, mGbuffer->mSrvHeap, mGbuffer->mCurrentResoureceGPUSRV,
+		mGbuffer->mHistoryResoureceGPUSRV, mGbuffer->mHistoryResourece.Get(), targetRTV,RenderTarget,mGbuffer->mUVVelocityGPUSRV,DepthStencilView());
+
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(RenderTarget,
 		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 	if (BDebugRendering)
 	{
 		mCommandList->RSSetViewports(1, &mMainScreenViewport);
 		mCommandList->RSSetScissorRects(1, &mMainScissorRect);
+
+		mCommandList->OMSetRenderTargets(1, &targetRTV, true, &DepthStencilView());
+
 		auto instanceBuffer = mCurrentFrameResource->InstanceBuffer->Resource();
 
 		mCommandList->SetGraphicsRootSignature(mPSOManage->mRootSignature["Debug"].Get());
 		mCommandList->SetPipelineState(mPSOManage->mPSOs["Debug"].Get());
 
-		ID3D12DescriptorHeap* srvHeaps[] = { mGbuffer->GetDescHeap().Get() };
+		ID3D12DescriptorHeap* srvHeaps[] = { mGbuffer->GetDescHeap().Get()};
 		mCommandList->SetDescriptorHeaps(_countof(srvHeaps), srvHeaps);
 		mCommandList->SetGraphicsRootDescriptorTable(0, mGbuffer->GetDescHeap()->GetGPUDescriptorHandleForHeapStart());
 
@@ -659,10 +673,18 @@ void RenderBase::Draw(GameTimer& gt)
 
 		mRenderItemManage->Draw(mCommandList.Get(), RenderLayer::Debug, instanceBuffer);
 
-		ID3D12DescriptorHeap* DepthHeaps[] = { mShadowMapManager->GetDescriptorHeap().Get() };
-		mCommandList->SetDescriptorHeaps(_countof(DepthHeaps), DepthHeaps);
-		mCommandList->SetGraphicsRootDescriptorTable(0, mShadowMapManager->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+		ID3D12DescriptorHeap* descriptorHeaps[] = { mGbuffer->GetDescHeap().Get() };
+		mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+		mCommandList->SetGraphicsRootDescriptorTable(0, mGbuffer->mUVVelocityGPUSRV);
+
+
 // 
+//  		ID3D12DescriptorHeap* DepthHeaps[] = { mShadowMapManager->GetDescriptorHeap().Get() };
+//   		mCommandList->SetDescriptorHeaps(_countof(DepthHeaps), DepthHeaps);
+//  		
+//  		mCommandList->SetGraphicsRootDescriptorTable(0, mShadowMapManager->GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+  
 		mRenderItemManage->Draw(mCommandList.Get(), RenderLayer::Depth, instanceBuffer);
 	}
 
@@ -842,7 +864,7 @@ void RenderBase::CreateDevice()
   		ComPtr<ID3D12Debug> debugController;
   		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController))))
   		{
-//  			debugController->EnableDebugLayer();
+  			debugController->EnableDebugLayer();
   		}
   	}
 #endif
@@ -935,7 +957,6 @@ void RenderBase::CreateDevice()
 	assert(m4xMsaaQuality > 0 && "Unexpected MSAA quality level.");
 
 }
-
 
 void RenderBase::OnResize(int clientWidth, int clientHeight)
 {

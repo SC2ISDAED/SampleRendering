@@ -200,7 +200,7 @@ void ShadowMapManager::UpdateMainPass(int index, FrameResource *CurrentFrameReso
 	XMStoreFloat4x4(&mShadowPassCB.Proj, XMMatrixTranspose(proj));
 	XMStoreFloat4x4(&mShadowPassCB.InvProj, XMMatrixTranspose(invProj));
 	XMStoreFloat4x4(&mShadowPassCB.ViewProj, XMMatrixTranspose(viewProj));
-	XMStoreFloat4x4(&mShadowPassCB.InvViewProj, XMMatrixTranspose(invViewProj));
+
 
 	mShadowPassCB.EyePosW = mLightPosW;
 	mShadowPassCB.RenderTargetSize = XMFLOAT2((float)w, (float)h);

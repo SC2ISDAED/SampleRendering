@@ -349,13 +349,15 @@ void RenderItemManage::BuildRenderItem()
 	boxRitem->StartIndexLocation = boxRitem->Geo->DrawArgs["box"].StartIndexLocation;
 	boxRitem->BaseVertexLocation = boxRitem->Geo->DrawArgs["box"].BaseVertexLocation;
 	boxRitem->Instances.resize(2);
-	XMStoreFloat4x4(&boxRitem->Instances[0].World, XMMatrixScaling(2.0f, 2.0f, 2.0f)*XMMatrixTranslation(0.0f, 0.5f, 0.0f));
+	XMStoreFloat4x4(&boxRitem->Instances[0].World, XMMatrixScaling(20.0f, 20.0f, 20.0f)*XMMatrixTranslation(0.0f, 0.5f, 0.0f));
+	boxRitem->Instances[0].LastWorld = boxRitem->Instances[0].World;
 	boxRitem->Instances[0].MaterialIndex = 3;
 	boxRitem->Instances[0].TexTransform;
 	XMStoreFloat4x4(&boxRitem->Instances[0].TexTransform, XMMatrixScaling(1.0f, 10.0f, 1.0f));
 
 
 	XMStoreFloat4x4(&boxRitem->Instances[1].World, XMMatrixTranslation(10.0f, 15.0f, 10.0f));
+	boxRitem->Instances[1].LastWorld = boxRitem->Instances[1].World;
 	boxRitem->Instances[1].MaterialIndex = mMaterials["StreakedMat"]->MatCBIndex;
 	boxRitem->Instances[1].TexTransform;
 	XMStoreFloat4x4(&boxRitem->Instances[1].World, XMMatrixTranslation(1.0f, 1.0f, 1.0f));
@@ -378,6 +380,7 @@ void RenderItemManage::BuildRenderItem()
 	gridRitem->BaseVertexLocation = gridRitem->Geo->DrawArgs["grid"].BaseVertexLocation;
 	gridRitem->Instances.resize(1);
 	XMStoreFloat4x4(&gridRitem->Instances[0].World, XMMatrixScaling(2.0f, 2.0f, 2.0f));
+	gridRitem->Instances[0].LastWorld = gridRitem->Instances[0].World;
 	XMStoreFloat4x4(&gridRitem->Instances[0].TexTransform, XMMatrixScaling(5.0f, 5.0f, 5.0f));
 	gridRitem->Instances[0].MaterialIndex = mMaterials["StreakedMat"]->MatCBIndex;
 	gridRitem->Instances[0].TexTransform;
@@ -409,6 +412,7 @@ void RenderItemManage::BuildRenderItem()
 		leftCylRitem->Instances.resize(1);
 		leftCylRitem->Instances[0].MaterialIndex = i;
 		XMStoreFloat4x4(&leftCylRitem->Instances[0].World, leftCylWorld);
+		leftCylRitem->Instances[0].LastWorld = leftCylRitem->Instances[0].World;
 		XMStoreFloat4x4(&leftCylRitem->Instances[0].TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 		XMStoreFloat4x4(&rightCylRitem->World, rightCylWorld);
@@ -420,6 +424,7 @@ void RenderItemManage::BuildRenderItem()
 		rightCylRitem->BaseVertexLocation = rightCylRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 		rightCylRitem->Instances.resize(1);
 		XMStoreFloat4x4(&rightCylRitem->Instances[0].World, rightCylWorld);
+		rightCylRitem->Instances[0].LastWorld = rightCylRitem->Instances[0].World;
 		rightCylRitem->Instances[0].MaterialIndex = i;
 		XMStoreFloat4x4(&rightCylRitem->Instances[0].TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
@@ -432,6 +437,7 @@ void RenderItemManage::BuildRenderItem()
 		leftSphereRitem->BaseVertexLocation = leftSphereRitem->Geo->DrawArgs["sphere"].BaseVertexLocation;
 		leftSphereRitem->Instances.resize(1);
 		XMStoreFloat4x4(&leftSphereRitem->Instances[0].World, leftSphereWorld);
+		leftSphereRitem->Instances[0].LastWorld = leftSphereRitem->Instances[0].World;
 		leftSphereRitem->Instances[0].MaterialIndex = i;
 
 		XMStoreFloat4x4(&rightSphereRitem->World, rightSphereWorld);
@@ -443,6 +449,7 @@ void RenderItemManage::BuildRenderItem()
 		rightSphereRitem->BaseVertexLocation = rightSphereRitem->Geo->DrawArgs["sphere"].BaseVertexLocation;
 		rightSphereRitem->Instances.resize(1);
 		XMStoreFloat4x4(&rightSphereRitem->Instances[0].World, rightSphereWorld);
+		rightSphereRitem->Instances[0].LastWorld = rightSphereRitem->Instances[0].World;
 		rightSphereRitem->Instances[0].MaterialIndex = i;
 // 
 		mAllRitems.push_back(std::move(leftCylRitem));

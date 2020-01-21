@@ -1,0 +1,41 @@
+﻿  Camera.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\camera.cpp(72): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\camera.cpp(127): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  d3dUtil.cpp
+  DDSTextureLoader.cpp
+  GeometryGenerator.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\geometrygenerator.cpp(80): warning C4018: “<=”: 有符号/无符号不匹配
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\geometrygenerator.cpp(112): warning C4018: “<=”: 有符号/无符号不匹配
+  MathHelper.cpp
+  DebugRendering.cpp
+  FrameResource.cpp
+  GameTimer.cpp
+  Gbuffer.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\shadowmapmanager.h(31): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  IBLProcess.cpp
+  IBLSpecular.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(211): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(240): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(241): warning C4244: “=”: 从“UINT”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(242): warning C4244: “=”: 从“UINT”转换到“FLOAT”，可能丢失数据
+  ModelManager.cpp
+  RenderBase.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\shadowmapmanager.h(31): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(570): warning C4244: “初始化”: 从“UINT64”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(995): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(996): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(1005): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+  RenderItemManage.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(47): warning C4267: “参数”: 从“size_t”转换到“UINT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(368): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(384): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(470): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(497): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+  PSOManage.cpp
+  ShadowMapManager.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\shadowmapmanager.h(31): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  TextureManage.cpp
+  WindowsMain.cpp
+  WindowsProcess.cpp
+d3dUtil.obj : error LNK2001: 无法解析的外部符号 IID_ID3D12Device
+E:\DirextX\SampleRendering\SampleRendering\x64\Release\SampleRendering.exe : fatal error LNK1120: 1 个无法解析的外部命令

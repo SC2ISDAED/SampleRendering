@@ -21,7 +21,7 @@ class IBLPorcess;
 class IBLSpecular;
 class Gbuffer;
 class ShadowMapManager;
-
+class TAAPassDraw;
 enum class Thread:int
 {
 	One,
@@ -143,7 +143,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> mCopyList;
 
 	//创建交换链，也就是实现双缓冲或者更高的缓冲
-	static const int SwapChainBufferCount = 2;
+	static const int SwapChainBufferCount = 3;
 	int mCurrentBackBuffer = 0;
 	
 	Microsoft::WRL::ComPtr<ID3D12Resource> mSwapChainBuffer[SwapChainBufferCount];
@@ -180,7 +180,7 @@ protected:
 	std::shared_ptr<Gbuffer> mGbuffer;
 	std::shared_ptr<ShadowMapManager> mShadowMapManager;
 	std::vector<std::shared_ptr<FrameResource>>mFrameResources;
-
+	std::shared_ptr<TAAPassDraw> mTAAPassDraw;
 	std::vector<Light> mlightArray;
 	int mCurrentFrameResourceIndex = 0;
 	FrameResource *mCurrentFrameResource = nullptr;

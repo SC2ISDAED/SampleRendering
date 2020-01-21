@@ -60,10 +60,8 @@ public:
 	void FirstPass(FrameResource *FrameResources, ID3D12GraphicsCommandList *cmdList);
 	void SecondPass(FrameResource *FrameResources,
 		ID3D12GraphicsCommandList *cmdList,
-		CD3DX12_CPU_DESCRIPTOR_HANDLE RenderTargetHandle,
 		std::shared_ptr<ShadowMapManager> shadowMap,
-		D3D12_CPU_DESCRIPTOR_HANDLE  DepthHandle,
-		ID3D12Resource * RenderTarget);
+		D3D12_CPU_DESCRIPTOR_HANDLE  DepthHandle);
 public:
 	void BuildResource();
 	void BuildDescriptors();
@@ -89,18 +87,33 @@ public:
 	CD3DX12_GPU_DESCRIPTOR_HANDLE mhRoughnessMetallicAOF0ResourceGPUSRV;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mhRoughnessMetallicAOF0ResourceCPURTV;
 
-	
+	Microsoft::WRL::ComPtr<ID3D12Resource> mUVVelocity;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mUVVelocityCpuSRV;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mUVVelocityGPUSRV;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mUVVelocityCPURTV;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> mHistoryResourece;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mHistoryResoureceCpuSRV;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mHistoryResoureceGPUSRV;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mHistoryResoureceCPURTV;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> mCurrentResourece;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mCurrentResoureceCpuSRV;
+	CD3DX12_GPU_DESCRIPTOR_HANDLE mCurrentResoureceGPUSRV;
+	CD3DX12_CPU_DESCRIPTOR_HANDLE mCurrentResoureceCPURTV;
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> mDepthStencilBuffer;
 	CD3DX12_CPU_DESCRIPTOR_HANDLE mDSV;
+
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mRtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mSrvHeap;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> mDsvHeap;
 
 
-	DXGI_FORMAT mFormatRGB32F = DXGI_FORMAT_R32G32B32_FLOAT;
+
 	DXGI_FORMAT mFormatRGBA32F = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	DXGI_FORMAT mFormatRGBA8F = DXGI_FORMAT_R8G8B8A8_UNORM;
+	
 
 	DXGI_FORMAT mDepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 

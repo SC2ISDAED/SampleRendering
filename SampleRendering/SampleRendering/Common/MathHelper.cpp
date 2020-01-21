@@ -11,6 +11,43 @@ using namespace DirectX;
 const float MathHelper::Infinity = FLT_MAX;
 const float MathHelper::Pi       = 3.1415926535f;
 
+
+double MathHelper::IntegerRadicalInverse(int Base, int i)
+{
+	int numPoints, inverse;
+	numPoints = 1;
+	// 此循环将i在"Base"进制下的数字左右Flip
+	for (inverse = 0; i > 0; i /= Base)
+	{
+		inverse = inverse * Base + (i % Base);
+		numPoints = numPoints * Base;
+	}
+
+	// 除以Digit将这个数镜像到小数点右边
+	return inverse / (double)numPoints;
+}
+
+
+double MathHelper::RadicalInverse(int Base, int i)
+{
+
+	double Digit, Radical, Inverse;
+	Digit = Radical = 1.0 / (double)Base;
+	Inverse = 0.0;
+	while (i)
+	{
+		// i余Base求出i在"Base"进制下的最低位的数
+		// 乘以Digit将这个数镜像到小数点右边
+		Inverse += Digit * (double)(i % Base);
+		Digit *= Radical;
+
+		// i除以Base即可求右一位的数
+		i /= Base;
+	}
+	return Inverse;
+
+}
+
 float MathHelper::AngleFromXY(float x, float y)
 {
 	float theta = 0.0f;

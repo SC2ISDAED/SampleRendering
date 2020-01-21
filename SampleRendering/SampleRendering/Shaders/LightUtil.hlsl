@@ -21,6 +21,7 @@ struct InstanceData
 {
     float4x4 World;
     float4x4 TexTransform;
+	float4x4 LastWorld;
     uint MaterialIndex;
     uint InstPad0;
     uint InstPad1;

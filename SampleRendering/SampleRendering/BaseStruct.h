@@ -7,6 +7,7 @@ struct InstanceData
 {
 	DirectX::XMFLOAT4X4 World = MathHelper::Identity4x4();
 	DirectX::XMFLOAT4X4 TexTransform = MathHelper::Identity4x4();
+	DirectX::XMFLOAT4X4 LastWorld = MathHelper::Identity4x4();//”√”⁄TAA
 	UINT MaterialIndex;
 	UINT BaseInstanceOffset=0;
 	UINT PAD1=0;
@@ -19,7 +20,7 @@ struct PassConstants
 	DirectX::XMFLOAT4X4 Proj = MathHelper::Identity4x4();
 	DirectX::XMFLOAT4X4 InvProj = MathHelper::Identity4x4();
 	DirectX::XMFLOAT4X4 ViewProj = MathHelper::Identity4x4();
-	DirectX::XMFLOAT4X4 InvViewProj = MathHelper::Identity4x4();
+	DirectX::XMFLOAT4X4 LastViewProj = MathHelper::Identity4x4();
 	DirectX::XMFLOAT3 EyePosW = { 0.0f, 0.0f, 0.0f };
 	float roughness = 0.0f;
 	DirectX::XMFLOAT2 RenderTargetSize = { 0.0f, 0.0f };
@@ -33,7 +34,9 @@ struct PassConstants
 	DirectX::XMFLOAT4 FogColor = { 0.5f,0.5f,0.5f,0.5f };
 	float FogStart = 0.0f;
 	float FogRandge = 100.0f;
-	DirectX::XMFLOAT2 cbPerObjectPad2;
+	float cbPerObjectPad2;
+	int FrameCount = 0;
+	
 
 	Light Lights[MaxLights];
 };

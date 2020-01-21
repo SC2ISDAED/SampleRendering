@@ -82,6 +82,9 @@
     <ClInclude Include="ModelManager.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="TAAPass.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameTimer.cpp">
@@ -139,6 +142,9 @@
     <ClCompile Include="ModelManager.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="TAAPass.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\Default.hlsl">
@@ -165,13 +171,19 @@
     <FxCompile Include="Shaders\GbufferFirstPass.hlsl">
       <Filter>资源文件</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\GbufferSecondPass.hlsl">
-      <Filter>资源文件</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\ShadowMap.hlsl">
       <Filter>资源文件</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\Debug.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\GbufferSecondPass.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Math.hlsl">
+      <Filter>资源文件</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\TAAPass.hlsl">
       <Filter>资源文件</Filter>
     </FxCompile>
   </ItemGroup>

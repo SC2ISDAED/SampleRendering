@@ -95,6 +95,14 @@ public:
 	static const float Infinity;
 	static const float Pi;
 
+	static double IntegerRadicalInverse(int Base, int i);
 
+	static double RadicalInverse(int Base, int i);
+	const  int NthPrimeNumber[5] = { 1,3,5,7,11 };
+	double Halton(int Dimension, int Index)
+	{
+		// 直接用第Dimension个质数作为底数调用RadicalInverse即可
+		return RadicalInverse(NthPrimeNumber[Dimension], Index);
+	}
 };
 

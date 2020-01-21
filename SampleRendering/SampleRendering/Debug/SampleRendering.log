@@ -1,10 +1,39 @@
-﻿  ModelManager.cpp
+﻿  Camera.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\camera.cpp(72): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\camera.cpp(127): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  d3dUtil.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\d3dutil.cpp(30): warning C4244: “参数”: 从“std::streamoff”转换到“SIZE_T”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\d3dutil.cpp(73): warning C4244: “=”: 从“UINT64”转换到“LONG_PTR”，可能丢失数据
+  DDSTextureLoader.cpp
+  GeometryGenerator.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\geometrygenerator.cpp(80): warning C4018: “<=”: 有符号/无符号不匹配
+e:\dirextx\samplerendering\samplerendering\samplerendering\common\geometrygenerator.cpp(112): warning C4018: “<=”: 有符号/无符号不匹配
+  MathHelper.cpp
+  DebugRendering.cpp
+  FrameResource.cpp
+  GameTimer.cpp
+  Gbuffer.cpp
+  IBLProcess.cpp
+  IBLSpecular.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(211): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(240): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(241): warning C4244: “=”: 从“UINT”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\iblspecular.cpp(242): warning C4244: “=”: 从“UINT”转换到“FLOAT”，可能丢失数据
+  ModelManager.cpp
   RenderBase.cpp
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(409): warning C4018: “<”: 有符号/无符号不匹配
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(569): warning C4244: “初始化”: 从“UINT64”转换到“int”，可能丢失数据
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(609): warning C4018: “<”: 有符号/无符号不匹配
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(994): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(995): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
-e:\dirextx\samplerendering-master\samplerendering\samplerendering\renderbase.cpp(1004): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(409): warning C4018: “<”: 有符号/无符号不匹配
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(569): warning C4244: “初始化”: 从“UINT64”转换到“int”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(609): warning C4018: “<”: 有符号/无符号不匹配
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(994): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(995): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderbase.cpp(1004): warning C4244: “=”: 从“int”转换到“FLOAT”，可能丢失数据
+  RenderItemManage.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\renderitemmanage.cpp(151): warning C4018: “<”: 有符号/无符号不匹配
+  PSOManage.cpp
+  ShadowMapManager.cpp
+  TextureManage.cpp
+e:\dirextx\samplerendering\samplerendering\samplerendering\texturemanage.cpp(5): warning C4018: “<”: 有符号/无符号不匹配
+  WindowsMain.cpp
+  WindowsProcess.cpp
   正在生成代码...
-  SampleRendering.vcxproj -> E:\DirextX\SampleRendering-master\SampleRendering\Debug\SampleRendering.exe
+LINK : fatal error LNK1104: 无法打开文件“assimp.lib”

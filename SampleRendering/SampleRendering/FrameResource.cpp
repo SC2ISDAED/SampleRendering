@@ -1,6 +1,7 @@
 #include "FrameResource.h"
 #include "Common/Camera.h"
 #include"RenderItem.h"
+#include "GameTimer.h"
 using namespace  DirectX;
 FrameResource::FrameResource(ID3D12Device* device, UINT passCount, UINT objectCount,
 	UINT MaterialCount)
@@ -23,12 +24,59 @@ void FrameResource::UpdateFrameResource(const GameTimer &gt,
 	std::unique_ptr<Material>> & mMaterials,
 	const Camera &mCamera)
 {
-	UpdateInstancedData(mAllRitems, mCamera);
+	UpdateInstancedData(gt,mAllRitems, mCamera);
+//	InlizeInstancedData(mAllRitems, mCamera);
 	UpdateMainPassCBS(mMainPassCB);
 	UpdateMaterialCBS(gt, mMaterials);
 }
 
-void FrameResource::UpdateInstancedData(const std::vector<std::unique_ptr<RenderItem>> &mAllRitems,const Camera& mCamera)
+void FrameResource::UpdateInstancedData(const GameTimer &gt, const std::vector<std::unique_ptr<RenderItem>> &mAllRitems,const Camera& mCamera)
+{
+	XMMATRIX view = mCamera.GetView();
+	XMMATRIX invView = XMMatrixInverse(&XMMatrixDeterminant(view), view);
+
+	auto currObjectCB = InstanceBuffer.get();
+
+	XMMATRIX world = XMLoadFloat4x4(&mAllRitems[0]->Instances[0].World);
+	XMStoreFloat4x4(&mAllRitems[0]->Instances[0].LastWorld, world);
+	XMStoreFloat4x4(&mAllRitems[0]->Instances[0].World, XMMatrixTranslation(0.0f, 0.0f, 1.0f*gt.TotalTime())*XMMatrixScaling(10.0f, 10.0f, 10.0f));
+		
+	int visibleInstanceCount = 0;
+	for (auto& e : mAllRitems)
+	{
+		const auto& instanceData = e->Instances;
+
+
+		for (UINT i = 0; i < (UINT)instanceData.size(); ++i)
+		{
+			XMMATRIX world = XMLoadFloat4x4(&instanceData[i].World);
+			XMMATRIX Lastworld = XMLoadFloat4x4(&instanceData[i].LastWorld);
+			XMMATRIX texTransform = XMLoadFloat4x4(&instanceData[i].TexTransform);
+
+			XMMATRIX invWorld = XMMatrixInverse(&XMMatrixDeterminant(world), world);
+
+
+			XMMATRIX viewToLocal = XMMatrixMultiply(invView, invWorld);
+
+
+			InstanceData data;
+
+			XMStoreFloat4x4(&data.LastWorld, XMMatrixTranspose(Lastworld));//暂时未完成场景中移动物体的TAA
+
+			XMStoreFloat4x4(&data.World, XMMatrixTranspose(world));
+
+			
+
+			XMStoreFloat4x4(&data.TexTransform, XMMatrixTranspose(texTransform));
+			data.MaterialIndex = instanceData[i].MaterialIndex;
+
+			currObjectCB->CopyData(visibleInstanceCount++, data);
+		}
+
+	}
+}
+
+void FrameResource::InlizeInstancedData(const std::vector<std::unique_ptr<RenderItem>> &mAllRitems, const Camera& mCamera)
 {
 	XMMATRIX view = mCamera.GetView();
 	XMMATRIX invView = XMMatrixInverse(&XMMatrixDeterminant(view), view);
@@ -54,7 +102,12 @@ void FrameResource::UpdateInstancedData(const std::vector<std::unique_ptr<Render
 
 			InstanceData data;
 
+			
+
 			XMStoreFloat4x4(&data.World, XMMatrixTranspose(world));
+
+			XMStoreFloat4x4(&data.LastWorld, XMMatrixTranspose(world));//暂时未完成场景中移动物体的TAA
+
 			XMStoreFloat4x4(&data.TexTransform, XMMatrixTranspose(texTransform));
 			data.MaterialIndex = instanceData[i].MaterialIndex;
 

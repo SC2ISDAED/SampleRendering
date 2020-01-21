@@ -115,6 +115,7 @@ void PSOManage::BuildRootSignatrue()
 	if (errorBlob != nullptr)
 	{
 		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+		
 	}
 	ThrowIfFailed(hr);
 
@@ -124,10 +125,10 @@ void PSOManage::BuildRootSignatrue()
 		serializedRootSig->GetBufferSize(),
 		IID_PPV_ARGS(mRootSignature["Opaque"].GetAddressOf())));
 
-	CD3DX12_ROOT_PARAMETER GbufferSlotRootParameter[4];
+	CD3DX12_ROOT_PARAMETER GbufferSlotRootParameter[5];
 
 
-	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 25, 0, 0);
+	texTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 26, 0, 0);
 	GbufferSlotRootParameter[0].InitAsConstantBufferView(0);
 	GbufferSlotRootParameter[1].InitAsShaderResourceView(0, 1);
 	GbufferSlotRootParameter[2].InitAsShaderResourceView(1, 1);
@@ -151,11 +152,11 @@ void PSOManage::BuildRootSignatrue()
 		serializedRootSig->GetBufferSize(),
 		IID_PPV_ARGS(mRootSignature["GbufferFirstPass"].GetAddressOf())));
 
-	CD3DX12_ROOT_PARAMETER GbufferSecondSlotRootParameter[6];
+	CD3DX12_ROOT_PARAMETER GbufferSecondSlotRootParameter[7];
 
 	CD3DX12_DESCRIPTOR_RANGE Textable;
 	//Normal,Position ,basecolor, roughness
-	Textable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 5, 0, 0);
+	Textable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 6, 0, 0);
 	CD3DX12_DESCRIPTOR_RANGE GbufferIBLDiffuseTable;
 	GbufferIBLDiffuseTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0,1);
 	CD3DX12_DESCRIPTOR_RANGE GbufferIBLSpecularTable;
@@ -165,14 +166,20 @@ void PSOManage::BuildRootSignatrue()
 
 	CD3DX12_DESCRIPTOR_RANGE ShadowsTable;
 	ShadowsTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 4, 0, 4);
+	
+	CD3DX12_DESCRIPTOR_RANGE historyTable;
+	//Normal,Position ,basecolor, roughness
+	historyTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 5);
+
 	GbufferSecondSlotRootParameter[0].InitAsConstantBufferView(0);
 	GbufferSecondSlotRootParameter[1].InitAsDescriptorTable(1, &Textable, D3D12_SHADER_VISIBILITY_ALL);
 	GbufferSecondSlotRootParameter[2].InitAsDescriptorTable(1, &GbufferIBLDiffuseTable, D3D12_SHADER_VISIBILITY_ALL);
 	GbufferSecondSlotRootParameter[3].InitAsDescriptorTable(1, &GbufferIBLSpecularTable, D3D12_SHADER_VISIBILITY_ALL);
 	GbufferSecondSlotRootParameter[4].InitAsDescriptorTable(1, &LUTTable, D3D12_SHADER_VISIBILITY_ALL);
 	GbufferSecondSlotRootParameter[5].InitAsDescriptorTable(1, &ShadowsTable, D3D12_SHADER_VISIBILITY_PIXEL);
+	GbufferSecondSlotRootParameter[6].InitAsDescriptorTable(1, &historyTable, D3D12_SHADER_VISIBILITY_PIXEL);
 
-	CD3DX12_ROOT_SIGNATURE_DESC rootSecondSigDesc(6, GbufferSecondSlotRootParameter,
+	CD3DX12_ROOT_SIGNATURE_DESC rootSecondSigDesc(7, GbufferSecondSlotRootParameter,
 		(UINT)staticSamplers.size(), staticSamplers.data(),
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
@@ -249,6 +256,40 @@ void PSOManage::BuildRootSignatrue()
 		IID_PPV_ARGS(mRootSignature["Debug"].GetAddressOf())));
 
 
+	CD3DX12_ROOT_PARAMETER TAAPassRootParameter[3];
+
+
+	CD3DX12_DESCRIPTOR_RANGE TAACurrenttable;
+	TAACurrenttable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 0);
+
+	CD3DX12_DESCRIPTOR_RANGE TAAHistorytable;
+	TAAHistorytable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0,1);
+
+	CD3DX12_DESCRIPTOR_RANGE UVVelocitytable;
+	UVVelocitytable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0, 2);
+
+	TAAPassRootParameter[0].InitAsDescriptorTable(1, &TAACurrenttable, D3D12_SHADER_VISIBILITY_ALL);
+	TAAPassRootParameter[1].InitAsDescriptorTable(1, &TAAHistorytable, D3D12_SHADER_VISIBILITY_ALL);
+	TAAPassRootParameter[2].InitAsDescriptorTable(1, &UVVelocitytable, D3D12_SHADER_VISIBILITY_ALL);
+
+	CD3DX12_ROOT_SIGNATURE_DESC TAAPassRootrootSigDesc(3, TAAPassRootParameter, (UINT)staticSamplers.size(), staticSamplers.data(),
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+	hr = D3D12SerializeRootSignature(&TAAPassRootrootSigDesc, D3D_ROOT_SIGNATURE_VERSION_1,
+		serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+
+	if (errorBlob != nullptr)
+	{
+		::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+	}
+	ThrowIfFailed(hr);
+
+	ThrowIfFailed(md3dDevice->CreateRootSignature(
+		0,
+		serializedRootSig->GetBufferPointer(),
+		serializedRootSig->GetBufferSize(),
+		IID_PPV_ARGS(mRootSignature["TAAPass"].GetAddressOf())));
+
 }
 
 void PSOManage::BuildLayOut()
@@ -318,6 +359,9 @@ void PSOManage::CompleShader()
 
 	mShaders["DebugVS"] = d3dUtil::CompileShader(L"Shaders\\Debug.hlsl", nullptr, "VS", "vs_5_1");
 	mShaders["DebugPS"] = d3dUtil::CompileShader(L"Shaders\\Debug.hlsl", nullptr, "PS", "ps_5_1");
+
+	mShaders["TAAPassVS"] = d3dUtil::CompileShader(L"Shaders\\TAAPass.hlsl", nullptr, "VS", "vs_5_1");
+	mShaders["TAAPassPS"] = d3dUtil::CompileShader(L"Shaders\\TAAPass.hlsl", nullptr, "PS", "ps_5_1");
 }
 
 void PSOManage::BuildPSOs()
@@ -415,6 +459,13 @@ void PSOManage::BuildPSOs()
 	GbufferFirstPassPsoDesc.DepthStencilState.StencilWriteMask = (UINT)0xff;
 	GbufferFirstPassPsoDesc.DepthStencilState.StencilReadMask = (UINT)0xff;
 	GbufferFirstPassPsoDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+
+	GbufferFirstPassPsoDesc.NumRenderTargets = 5;
+	GbufferFirstPassPsoDesc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	GbufferFirstPassPsoDesc.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	GbufferFirstPassPsoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	GbufferFirstPassPsoDesc.RTVFormats[3] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	GbufferFirstPassPsoDesc.RTVFormats[4] = DXGI_FORMAT_R16G16_FLOAT;
 	GbufferFirstPassPsoDesc.VS =
 	{
 		reinterpret_cast<BYTE*>(mShaders["GbufferFirstPassVS"]->GetBufferPointer()),
@@ -490,5 +541,25 @@ void PSOManage::BuildPSOs()
 		mShaders["DebugPS"]->GetBufferSize()
 	};
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&debugPsoDesc, IID_PPV_ARGS(&mPSOs["Debug"])));
+
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC TAAPsoDesc = opaquePsoDesc;
+	GbufferSecondPassPsoDesc.InputLayout = { mInputLayout["opaque"].data(), (UINT)mInputLayout["opaque"].size() };
+	TAAPsoDesc.DepthStencilState.DepthEnable = true;
+	TAAPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	TAAPsoDesc.DepthStencilState.StencilEnable = true;
+
+	TAAPsoDesc.pRootSignature = mRootSignature["TAAPass"].Get();
+	TAAPsoDesc.VS =
+	{
+		reinterpret_cast<BYTE*>(mShaders["TAAPassVS"]->GetBufferPointer()),
+		mShaders["TAAPassVS"]->GetBufferSize()
+	};
+	TAAPsoDesc.PS =
+	{
+		reinterpret_cast<BYTE*>(mShaders["TAAPassPS"]->GetBufferPointer()),
+		mShaders["TAAPassPS"]->GetBufferSize()
+	};
+	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&TAAPsoDesc, IID_PPV_ARGS(&mPSOs["TAAPass"])));
 
 }

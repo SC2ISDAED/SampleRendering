@@ -204,7 +204,7 @@ void IBLSpecular::UpdatePassBuffer(int level)
 		XMStoreFloat4x4(&cubeFacePassCB.Proj, XMMatrixTranspose(proj));
 		XMStoreFloat4x4(&cubeFacePassCB.InvProj, XMMatrixTranspose(invProj));
 		XMStoreFloat4x4(&cubeFacePassCB.ViewProj, XMMatrixTranspose(viewProj));
-		XMStoreFloat4x4(&cubeFacePassCB.InvViewProj, XMMatrixTranspose(invViewProj));
+	
 		cubeFacePassCB.EyePosW = mCamera[i].GetCameraLocation3f();
 		cubeFacePassCB.RenderTargetSize = XMFLOAT2((float)mWidth, (float)mHeight);
 		cubeFacePassCB.InvRenderTargetSize = XMFLOAT2(1.0f / mWidth, 1.0f / mHeight);

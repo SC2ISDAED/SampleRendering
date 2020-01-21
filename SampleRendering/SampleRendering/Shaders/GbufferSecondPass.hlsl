@@ -7,6 +7,7 @@ TextureCube gSpecularMap : register(t0, space2);
 Texture2D LUTMap : register(t0, space3);
 
 Texture2D gShadowMaps[4] : register(t0, space4);
+Texture2D gHistoryMap:register(t0, space5);
 
 SamplerState gsamPointWrap : register(s0);
 SamplerState gsamPointClamp : register(s1);
@@ -101,14 +102,21 @@ VertexOut VS(uint vid : SV_VertexID)
 
     return vout;
 }
-float4 PS(VertexOut pin) : SV_Target
+float4 PS(VertexOut pin) : SV_Target0
 {
     //Gbuffer中的数据
     
     float3 normal = gTextureMaps[0].Sample(gsamAnisotropicWrap, pin.TexC).rgb;
     normal = normalize(normal);
     float3 position = gTextureMaps[1].Sample(gsamAnisotropicWrap, pin.TexC).rgb;
+
+	float distance = 0.001f;
+
     float4 Albeo = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC);
+
+	float2 uvVelicity = gTextureMaps[4].Sample(gsamPointWrap, pin.TexC).rg;
+	float4 historyBuffer = gHistoryMap.Sample(gsamLinearWrap, pin.TexC+uvVelicity);
+
     float3 RoughnessMetallicAO = gTextureMaps[3].Sample(gsamAnisotropicWrap, pin.TexC).rgb;
 
     float Roughness = RoughnessMetallicAO.r;
@@ -165,6 +173,31 @@ float4 PS(VertexOut pin) : SV_Target
 
   //  litColor = litColor / (litColor + float3(1.0, 1.0, 1.0));
     //伽马校正
-    litColor = pow(litColor, 1 / 1.5);
-    return float4(litColor, 1.0);
+   litColor = pow(litColor, 1 / 1.5);
+/* SSAA 备用
+	float4 LeftAlbeo = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC + float2(-distance, 0.0f));
+	float4 doubleLeftAlbeo = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC + float2(-distance*2, 0.0f));
+	float4 topAlbeo = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC + float2(0.0f, distance));
+	float4 buttomAlbep = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC + float2(0.0f, -distance));
+	float4 rightAlbep = gTextureMaps[2].Sample(gsamAnisotropicWrap, pin.TexC + float2(distance, 0.0f));
+
+	float L =0.2126*Albeo.r + 0.7152*Albeo.g + 0.00722*Albeo.b;
+	float Ll = 0.2126*LeftAlbeo.r + 0.7152*LeftAlbeo.g + 0.00722*LeftAlbeo.b;
+
+	float Lt = 0.2126*topAlbeo.r + 0.7152*topAlbeo.g + 0.00722*topAlbeo.b;
+	float Lll = 0.2126*doubleLeftAlbeo.r + 0.7152*doubleLeftAlbeo.g + 0.00722*doubleLeftAlbeo.b;
+	float Lb = 0.2126*buttomAlbep.r + 0.7152*buttomAlbep.g + 0.00722*buttomAlbep.b;
+	float Lr= 0.2126*rightAlbep.r + 0.7152*rightAlbep.g + 0.00722*rightAlbep.b;
+
+	float cmax = max(abs(L - Ll), abs(L - Lt));
+	cmax = max(cmax, abs(L - Lll));
+	cmax = max(cmax, abs(L - Lb));
+	cmax = max(cmax, abs(L - Lr));
+
+	int el = abs(L - Ll)>0.1f;
+	int e = el ^ Ll > 0.5*cmax;
+*/
+
+    return float4(litColor,1.0f);
+
 };
